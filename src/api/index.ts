@@ -1,9 +1,6 @@
-// https://api.jsonbin.io/v3/b/6779d9e0acd3cb34a8c43e88
-// $2a$10$Z4J4Dsm4PrmiogOMtpNQz.727J5Ujvd4b/39SJQ2SQQ1ZDOeGvYwq
-
 import axios from 'axios';
-
-const API_KEY = '$2a$10$Z4J4Dsm4PrmiogOMtpNQz.727J5Ujvd4b/39SJQ2SQQ1ZDOeGvYwq';
+import {API_KEY} from './key';
+import {City} from '../interface/City';
 
 interface JsonBinResponse {
   record: City[];

@@ -3,3 +3,5 @@ interface City {
   descripcion: string;
   imagen: string;
 }
+
+export type {City};

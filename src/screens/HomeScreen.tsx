@@ -1,3 +1,4 @@
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ScrollView,
   SafeAreaView,
@@ -8,20 +9,24 @@ import {
   RefreshControl,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
 import {getCities} from '../api';
 import {Theme, lightTheme, darkTheme} from '../theme/theme';
 import {CityCard} from '../components/CityCard';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {City} from '../interface/City';
+import {CityDetailModal} from '../components/CityDetailModal';
+import { FlatList } from 'react-native-gesture-handler';
 
 export default function HomeScreen() {
-  const [data, setData] = React.useState<City[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [isDarkIcon, setIsDarkIcon] = React.useState(false);
-  const [theme, setTheme] = React.useState<Theme>(lightTheme);
+  const [data, setData] = useState<City[]>([]); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [isDarkIcon, setIsDarkIcon] = useState(false);
+  const [theme, setTheme] = useState<Theme>(lightTheme);
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchCities();
   }, []);
 
@@ -48,6 +53,17 @@ export default function HomeScreen() {
     setIsDarkIcon(prev => !prev);
   };
 
+  // BottomSheetModal
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalPress = useCallback((city: City) => {
+    setSelectedCity(city);
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
   if (loading) {
     return (
       <View
@@ -72,18 +88,17 @@ export default function HomeScreen() {
     );
   }
 
-  console.log(data);
-
   return (
     <SafeAreaView style={{backgroundColor: theme.colors.background}}>
       <View style={[styles.appBar, {backgroundColor: theme.colors.background}]}>
         <Text style={[styles.appBarTitle, {color: theme.colors.text}]}>
-          Maravillas del mundo
+          Maravillas
         </Text>
         <TouchableOpacity style={styles.iconButton} onPress={toggleTheme}>
           <Text>{isDarkIcon ? '🌙' : '☀️'}</Text>
         </TouchableOpacity>
       </View>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
@@ -102,10 +117,20 @@ export default function HomeScreen() {
               description={item.descripcion}
               imageUrl={item.imagen}
               theme={theme}
+              onPress={() => {
+                handlePresentModalPress(item);
+              }}
             />
           ))
         )}
       </ScrollView>
+
+      <CityDetailModal
+        bottomSheetModalRef={bottomSheetModalRef}
+        selectedCity={selectedCity}
+        theme={theme}
+        onSheetChanges={handleSheetChanges}
+      />
     </SafeAreaView>
   );
 }
@@ -143,5 +168,25 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 8,
+  },
+
+  // BottomSheetModal
+  modalImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 16,
+  },
+  bottomSheetContent: {
+    padding: 16,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  modalDescription: {
+    fontSize: 16,
+    lineHeight: 24,
   },
 });

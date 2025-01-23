@@ -2,8 +2,13 @@
 #
 .DS_Store
 
+# Key 
+key.ts
+
+# Environment
+.env
+
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser

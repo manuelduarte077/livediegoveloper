@@ -1,29 +1,40 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
-import { Theme } from '../theme/theme';
+import {StyleSheet, View, Image, Text, Pressable} from 'react-native';
+import {Theme} from '../theme/theme';
 
 interface CityCardProps {
   title: string;
   description: string;
   imageUrl: string;
   theme: Theme;
+  onPress: () => void;
 }
 
-export const CityCard = ({ title, description, imageUrl, theme }: CityCardProps) => {
+export const CityCard = ({
+  title,
+  description,
+  imageUrl,
+  theme,
+  onPress,
+}: CityCardProps) => {
   return (
-    <View style={[styles.item, { backgroundColor: theme.colors.card }]}>
-      <Image
-        source={{ uri: imageUrl }}
-        style={styles.image}
-        resizeMode="cover"
-      />
-      <View style={styles.textContainer}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>{title}</Text>
-        <Text style={[styles.description, { color: theme.colors.description }]}>
-          {description}
-        </Text>
+    <Pressable onPress={onPress}>
+      <View style={[styles.item, {backgroundColor: theme.colors.card}]}>
+        <Image
+          source={{uri: imageUrl}}
+          style={styles.image}
+          resizeMode="cover"
+        />
+        <View style={styles.textContainer}>
+          <Text style={[styles.title, {color: theme.colors.text}]}>
+            {title}
+          </Text>
+          <Text style={[styles.description, {color: theme.colors.description}]}>
+            {description}
+          </Text>
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -56,4 +67,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-}); 
+});

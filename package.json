@@ -10,9 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^5.0.6",
     "axios": "^1.7.9",
     "react": "18.3.1",
-    "react-native": "0.77.0"
+    "react-native": "0.77.0",
+    "react-native-gesture-handler": "^2.22.0",
+    "react-native-reanimated": "^3.16.7"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
